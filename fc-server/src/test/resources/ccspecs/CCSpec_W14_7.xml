@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:CCSpec xmlns:ns2="urn:epcglobal:ale:xsd:1">
+	<logicalReaders>
+		<logicalReader>LogicalReader1</logicalReader>
+	</logicalReaders>
+	<boundarySpec>
+		<repeatPeriod unit="MS">20000</repeatPeriod>
+		<duration unit="MS">19000</duration>
+		<noNewTagsInterval unit="MS">0</noNewTagsInterval>
+	</boundarySpec>
+	<cmdSpecs>
+		<cmdSpec reportIfEmpty="true" name="cmd1">
+			<opSpecs>
+				<opSpec>
+					<opName>W12</opName>
+					<opType>WRITE</opType>
+					<fieldspec>
+						<fieldname>nsi</fieldname>
+						<datatype>uint</datatype>
+						<format>hex</format>
+					</fieldspec>
+					<dataSpec>
+						<data>ff</data>
+					</dataSpec>
+				</opSpec>
+			</opSpecs>
+		</cmdSpec>
+	</cmdSpecs>
+</ns2:CCSpec>

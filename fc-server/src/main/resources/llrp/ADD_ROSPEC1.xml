@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<llrp:ADD_ROSPEC xmlns:llrp="http://www.llrp.org/ltk/schema/core/encoding/xml/1.0" Version="1" MessageID="0">
+  <llrp:ROSpec>
+    <llrp:ROSpecID>1</llrp:ROSpecID>
+    <llrp:Priority>0</llrp:Priority>
+    <llrp:CurrentState>Disabled</llrp:CurrentState>
+    <llrp:ROBoundarySpec>
+      <llrp:ROSpecStartTrigger>
+        <llrp:ROSpecStartTriggerType>Periodic</llrp:ROSpecStartTriggerType>
+        <llrp:PeriodicTriggerValue>
+          <llrp:Offset>0</llrp:Offset>
+          <llrp:Period>10000</llrp:Period>
+        </llrp:PeriodicTriggerValue>
+      </llrp:ROSpecStartTrigger>
+      <llrp:ROSpecStopTrigger>
+        <llrp:ROSpecStopTriggerType>Null</llrp:ROSpecStopTriggerType>
+        <llrp:DurationTriggerValue>0</llrp:DurationTriggerValue>
+      </llrp:ROSpecStopTrigger>
+    </llrp:ROBoundarySpec>
+    <llrp:AISpec>
+      <!-- llrp:AntennaIDs>7</llrp:AntennaIDs-->
+      <llrp:AntennaIDs>0</llrp:AntennaIDs> <!-- use antenna ID 0 for conformance test -->
+      <llrp:AISpecStopTrigger>
+        <llrp:AISpecStopTriggerType>Tag_Observation</llrp:AISpecStopTriggerType>
+        <llrp:DurationTrigger>5000</llrp:DurationTrigger>
+        <llrp:TagObservationTrigger>
+          <llrp:TriggerType>Upon_Seeing_N_Tags_Or_Timeout</llrp:TriggerType>
+          <llrp:NumberOfTags>200</llrp:NumberOfTags>
+          <llrp:NumberOfAttempts>0</llrp:NumberOfAttempts>
+          <llrp:T>0</llrp:T>
+          <llrp:Timeout>10000</llrp:Timeout>
+        </llrp:TagObservationTrigger>
+      </llrp:AISpecStopTrigger>
+      <llrp:InventoryParameterSpec>
+        <llrp:InventoryParameterSpecID>1</llrp:InventoryParameterSpecID>
+        <llrp:ProtocolID>EPCGlobalClass1Gen2</llrp:ProtocolID>
+      </llrp:InventoryParameterSpec>
+    </llrp:AISpec>
+    <llrp:ROReportSpec>
+      <llrp:ROReportTrigger>Upon_N_Tags_Or_End_Of_ROSpec</llrp:ROReportTrigger>
+      <llrp:N>200</llrp:N>
+      <llrp:TagReportContentSelector>
+        <llrp:EnableROSpecID>1</llrp:EnableROSpecID>
+        <llrp:EnableSpecIndex>1</llrp:EnableSpecIndex>
+        <llrp:EnableInventoryParameterSpecID>1</llrp:EnableInventoryParameterSpecID>
+        <llrp:EnableAntennaID>1</llrp:EnableAntennaID>
+        <llrp:EnableChannelIndex>1</llrp:EnableChannelIndex>
+        <llrp:EnablePeakRSSI>1</llrp:EnablePeakRSSI>
+        <llrp:EnableFirstSeenTimestamp>1</llrp:EnableFirstSeenTimestamp>
+        <llrp:EnableLastSeenTimestamp>1</llrp:EnableLastSeenTimestamp>
+        <llrp:EnableTagSeenCount>1</llrp:EnableTagSeenCount>
+        <llrp:EnableAccessSpecID>1</llrp:EnableAccessSpecID>
+        <llrp:C1G2EPCMemorySelector>
+          <llrp:EnableCRC>1</llrp:EnableCRC>
+          <llrp:EnablePCBits>1</llrp:EnablePCBits>
+        </llrp:C1G2EPCMemorySelector>
+      </llrp:TagReportContentSelector>
+    </llrp:ROReportSpec>
+  </llrp:ROSpec>
+</llrp:ADD_ROSPEC>
+

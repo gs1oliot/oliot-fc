@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:ECSpec xmlns:ns2="urn:epcglobal:ale:xsd:1" includeSpecInReports="false">
+    <logicalReaders>
+        <logicalReader>LogicalReader1</logicalReader>
+    </logicalReaders>
+    <boundarySpec>
+        <repeatPeriod unit="MS">20000</repeatPeriod>
+        <duration unit="MS">20000</duration>
+        <stableSetInterval unit="MS">0</stableSetInterval>
+        <extension>
+            <whenDataAvailable>false</whenDataAvailable>
+        </extension>
+    </boundarySpec>
+    <reportSpecs>
+        <reportSpec reportName="report1" reportIfEmpty="false" reportOnlyOnChange="false">
+            <reportSet set="CURRENT"/>
+            <filterSpec>
+                <extension>
+                    <filterList>
+                        
+                    </filterList>
+                </extension>
+            </filterSpec>
+            <output includeEPC="false" includeTag="true" includeRawHex="false" includeRawDecimal="true" includeCount="true">
+	            <extension>
+					<fieldList>
+				  	    <field>
+							<!-- name>temperature</name-->
+							<fieldspec>
+								<fieldname>afi</fieldname>
+							</fieldspec>
+					    </field>
+					    <field>
+							<!-- name>temperature</name-->
+							<fieldspec>
+								<fieldname>nsi</fieldname>
+							</fieldspec>
+					    </field>
+					    
+					</fieldList>
+				</extension>
+            </output>
+        </reportSpec>
+    </reportSpecs>
+</ns2:ECSpec>

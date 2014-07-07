@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:CCSpec xmlns:ns2="urn:epcglobal:ale:xsd:1">
+	<logicalReaders>
+		<logicalReader>LogicalReader1</logicalReader>
+	</logicalReaders>
+	<boundarySpec>
+		<repeatPeriod unit="MS">20000</repeatPeriod>
+		<duration unit="MS">19000</duration>
+		<noNewTagsInterval unit="MS">0</noNewTagsInterval>
+	</boundarySpec>
+	<cmdSpecs>
+		<cmdSpec reportIfEmpty="true" name="cmd1">
+			<opSpecs>
+				<opSpec>
+					<opName>W5</opName>
+					<opType>WRITE</opType>
+					<fieldspec>
+						<fieldname>@3.32</fieldname>
+						<datatype>uint</datatype>
+						<format>hex</format>
+					</fieldspec>
+					<dataSpec>
+						<data>ffaa ffaa</data>
+					</dataSpec>
+				</opSpec>
+				<opSpec>
+					<opName>W1</opName>
+					<opType>WRITE</opType>
+					<fieldspec>
+						<fieldname>@0.32</fieldname>
+						<datatype>uint</datatype>
+						<format>hex</format>
+					</fieldspec>
+					<dataSpec>
+						<data>ffaa ffaa</data>
+					</dataSpec>
+				</opSpec>
+				<opSpec>
+					<opName>W2</opName>
+					<opType>WRITE</opType>
+					<fieldspec>
+						<fieldname>@0.32.32</fieldname>
+						<datatype>uint</datatype>
+						<format>hex</format>
+					</fieldspec>
+					<dataSpec>
+						<data>ffaa ffaa</data>
+					</dataSpec>
+				</opSpec>
+				<opSpec>
+					<opName>W3</opName>
+					<opType>WRITE</opType>
+					<fieldspec>
+						<fieldname>@1.96.32</fieldname>
+						<datatype>epc</datatype>
+						<format>epc-tag</format>
+					</fieldspec>
+					<dataSpec>
+						<data>urn:epc:tag:sgtin-96:3.0037000.030241.1041973</data>
+					</dataSpec>
+				</opSpec>
+			</opSpecs>
+		</cmdSpec>
+	</cmdSpecs>
+</ns2:CCSpec>

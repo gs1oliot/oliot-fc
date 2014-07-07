@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<llrp:DELETE_ROSPEC xmlns:llrp="http://www.llrp.org/ltk/schema/core/encoding/xml/1.0" Version="1" MessageID="0">
+  <llrp:ROSpecID>1</llrp:ROSpecID>
+</llrp:DELETE_ROSPEC>

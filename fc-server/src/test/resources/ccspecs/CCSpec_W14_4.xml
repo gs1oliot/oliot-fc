@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:CCSpec xmlns:ns2="urn:epcglobal:ale:xsd:1">
+	<logicalReaders>
+		<logicalReader>LogicalReader1</logicalReader>
+	</logicalReaders>
+	<boundarySpec>
+		<repeatPeriod unit="MS">20000</repeatPeriod>
+		<duration unit="MS">19000</duration>
+		<noNewTagsInterval unit="MS">0</noNewTagsInterval>
+	</boundarySpec>
+	<cmdSpecs>
+		<cmdSpec reportIfEmpty="true" name="cmd1">
+			<opSpecs>
+				<opSpec>
+					<opName>R8</opName>
+					<opType>READ</opType>
+					<fieldspec>
+						<fieldname>userBank</fieldname>
+						<datatype>uint</datatype>
+						<format>hex</format>
+					</fieldspec>
+				</opSpec>
+				<opSpec>
+					<opName>R9</opName>
+					<opType>READ</opType>
+					<fieldspec>
+						<fieldname>killPwd</fieldname>
+						<datatype>uint</datatype>
+						<format>hex</format>
+					</fieldspec>
+				</opSpec>
+				<opSpec>
+					<opName>R10</opName>
+					<opType>READ</opType>
+					<fieldspec>
+						<fieldname>accessPwd</fieldname>
+						<datatype>uint</datatype>
+						<format>hex</format>
+					</fieldspec>
+				</opSpec>
+				<opSpec>
+					<opName>R6</opName>
+					<opType>READ</opType>
+					<fieldspec>
+						<fieldname>epcBank</fieldname>
+						<datatype>uint</datatype>
+						<format>hex</format>
+					</fieldspec>
+				</opSpec>
+			</opSpecs>
+		</cmdSpec>
+	</cmdSpecs>
+</ns2:CCSpec>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:CCSpec xmlns:ns2="urn:epcglobal:ale:xsd:1" inclucdeSpecInReports="false">
+	<logicalReaders>
+		<logicalReader>LogicalReader1</logicalReader>
+	</logicalReaders>
+	<boundarySpec>
+		<repeatPeriod unit="MS">19000</repeatPeriod>
+		<duration unit="MS">20000</duration>
+		<tagsProcessedCount>0</tagsProcessedCount>
+		<afterError>FALSE</afterError>
+	</boundarySpec>
+	<cmdSpecs>
+		<cmdSpec reportIfEmpty="false" name="cmd1">
+			<filterSpec>
+				<filterList>
+					<filter>
+						<includeExclude>INCLUDE</includeExclude>
+						<fieldspec>
+							<fieldname>epc</fieldname>
+						</fieldspec>
+						<patList>
+							<pat>3074 0242 201D 8840 000F E634</pat>
+						</patList>
+					</filter>
+				</filterList>
+			</filterSpec>
+			<opSpecs>
+				<opSpec>
+					<opName>RR</opName>
+					<fieldspec>
+						<fieldname>epcBank</fieldname>
+					</fieldspec>
+					<opType>READ</opType>
+				</opSpec>
+			</opSpecs>
+		</cmdSpec>
+	</cmdSpecs>
+</ns2:CCSpec>

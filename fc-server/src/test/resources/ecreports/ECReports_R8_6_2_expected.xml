@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:ECReports specName="eventcycle1" date="2013-11-06T18:52:09.711+09:00" ALEID="ETHZ-ALE535467964" totalMilliseconds="20000" terminationCondition="DURATION" xmlns:ns2="urn:epcglobal:ale:xsd:1">
+    <reports/>
+</ns2:ECReports>

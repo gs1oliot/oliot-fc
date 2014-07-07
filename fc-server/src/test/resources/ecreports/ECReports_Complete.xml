@@ -1,0 +1,102 @@
+<ns2:ECReports terminationCondition="DURATION"
+	totalMilliseconds="19000" ALEID="ETHZ-ALE1443999959" date="2013-10-16T22:53:56.873+09:00"
+	specName="eventcycle1" xmlns:ns2="urn:epcglobal:ale:xsd:1">
+	<reports>
+		<report>
+			<group>
+				<groupList>
+					<member>
+						<epc>urn:epc:id:gid:108816023.3481588.46911835578</epc>
+						<tag>urn:epc:tag:gid-96:108816023.3481588.46911835578</tag>
+						<rawHex>urn:epc:raw:96.x3567C6697351FF4AEC29CDBA</rawHex>
+						<rawDecimal>urn:epc:raw:96.16528161853733034861393464762
+						</rawDecimal>
+						<extension>
+							<fieldList>
+								<field>
+									<name>temperature</name>
+									<value>305419896</value>
+								</field>
+								<field>
+									<name>humidity</name>
+									<value>2880154539</value>
+								</field>
+							</fieldList>
+							<stats>
+								<stat xsi:type="ns2:ECTagTimestampStat" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+									<profile>TagTimestamps</profile>
+									<statBlocks>
+										<statBlock>
+											<readerName>test</readerName>
+											<sightings>
+												<sighting />
+											</sightings>
+										</statBlock>
+									</statBlocks>
+									<firstSightingTime>2013-10-16T22:53:46.921+09:00</firstSightingTime>
+									<lastSightingTime>2013-10-16T22:53:46.921+09:00</lastSightingTime>
+								</stat>
+								<stat>
+									<profile>default</profile>
+									<statBlocks>
+										<statBlock>
+											<readerName>test</readerName>
+											<sightings>
+												<sighting />
+											</sightings>
+										</statBlock>
+									</statBlocks>
+								</stat>
+							</stats>
+						</extension>
+					</member>
+					<member>
+						<epc>urn:epc:id:gid:11448722.5435017.53971027392</epc>
+						<tag>urn:epc:tag:gid-96:11448722.5435017.53971027392</tag>
+						<rawHex>urn:epc:raw:96.x350AEB19252EE89C90EC85C0</rawHex>
+						<rawDecimal>urn:epc:raw:96.16415904998698845731000452544
+						</rawDecimal>
+						<extension>
+							<fieldList>
+								<field>
+									<name>temperature</name>
+									<value>305419896</value>
+								</field>
+								<field>
+									<name>humidity</name>
+									<value>2880154539</value>
+								</field>
+							</fieldList>
+							<stats>
+								<stat xsi:type="ns2:ECTagTimestampStat" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+									<profile>TagTimestamps</profile>
+									<statBlocks>
+										<statBlock>
+											<readerName>test</readerName>
+											<sightings>
+												<sighting />
+											</sightings>
+										</statBlock>
+									</statBlocks>
+									<firstSightingTime>2013-10-16T22:53:46.919+09:00</firstSightingTime>
+									<lastSightingTime>2013-10-16T22:53:46.919+09:00</lastSightingTime>
+								</stat>
+								<stat>
+									<profile>default</profile>
+									<statBlocks>
+										<statBlock>
+											<readerName>test</readerName>
+											<sightings>
+												<sighting />
+											</sightings>
+										</statBlock>
+									</statBlocks>
+								</stat>
+							</stats>
+						</extension>
+					</member>
+				</groupList>
+			</group>
+		</report>
+	</reports>
+</ns2:ECReports>

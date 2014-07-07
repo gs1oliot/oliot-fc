@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:ECReports specName="ECSpec_R13_1" date="2013-11-06T22:03:03.393+09:00" ALEID="ETHZ-ALE1021738767" totalMilliseconds="19001" terminationCondition="DURATION" xmlns:ns2="urn:epcglobal:ale:xsd:1">
+    <reports>
+        <report reportName="report1">
+            <group>
+                <groupList>
+                    <member>
+                        <epc>urn:epc:id:gid:203907500.2850623.53422213671</epc>
+                    </member>
+                    <member>
+                        <epc>urn:epc:id:gid:1178462.9071312.36871239854</epc>
+                    </member>
+                    <member>
+                        <epc>urn:epc:id:gid:61676930.8722380.37312655562</epc>
+                    </member>
+                    <member>
+                        <epc>urn:epc:id:gid:262665284.16604448.757681046</epc>
+                    </member>
+                    <member>
+                        <epc>urn:epc:id:gid:108816023.3481588.46911835578</epc>
+                    </member>
+                    <member>
+                        <epc>urn:epc:id:gid:11448722.5435017.53971027392</epc>
+                    </member>
+                </groupList>
+                <groupCount>
+                    <count>6</count>
+                </groupCount>
+            </group>
+        </report>
+    </reports>
+    <ECSpec includeSpecInReports="true">
+        <logicalReaders>
+            <logicalReader>LogicalReader1</logicalReader>
+        </logicalReaders>
+        <boundarySpec>
+            <repeatPeriod unit="MS">20000</repeatPeriod>
+            <duration unit="MS">19000</duration>
+            <stableSetInterval unit="MS">0</stableSetInterval>
+            <extension>
+                <whenDataAvailable>false</whenDataAvailable>
+            </extension>
+        </boundarySpec>
+        <reportSpecs>
+            <reportSpec reportName="report1" reportIfEmpty="true" reportOnlyOnChange="true">
+                <reportSet set="CURRENT"/>
+                <output includeEPC="true" includeTag="false" includeRawHex="false" includeRawDecimal="false" includeCount="true"/>
+            </reportSpec>
+        </reportSpecs>
+    </ECSpec>
+</ns2:ECReports>

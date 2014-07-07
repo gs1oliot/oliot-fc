@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<ns2:TMFixedFieldListSpec xmlns:ns2="urn:epcglobal:ale:xsd:1" >
+	<fixedFields>
+		<fixedField>
+			<fieldname>symbol</fieldname>
+			<bank>3</bank>
+			<length>32</length>
+			<offset>0</offset>
+			<defaultDatatype>uint</defaultDatatype>
+			<defaultFormat>decimal</defaultFormat>
+		</fixedField>
+	</fixedFields>
+</ns2:TMFixedFieldListSpec>

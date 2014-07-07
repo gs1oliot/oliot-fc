@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:ECSpec xmlns:ns2="urn:epcglobal:ale:xsd:1" includeSpecInReports="false">
+    <logicalReaders>
+        <logicalReader>LogicalReader1</logicalReader>
+    </logicalReaders>
+    <boundarySpec>
+        <repeatPeriod unit="MS">20000</repeatPeriod>
+        <duration unit="MS">20000</duration>
+        <stableSetInterval unit="MS">0</stableSetInterval>
+		<extension>
+			<whenDataAvailable>false</whenDataAvailable>
+		</extension>
+    </boundarySpec>
+    <reportSpecs>
+        <reportSpec reportIfEmpty="false" reportOnlyOnChange="false" reportName="report1">
+            <reportSet set="CURRENT"/>
+            <filterSpec>
+                <includePatterns>
+                    <includePattern>urn:epc:pat:gid-96:203907500.*.*</includePattern>
+                </includePatterns>
+            </filterSpec>
+            <output includeRawHex="false" includeRawDecimal="true" includeEPC="false" includeTag="true" includeCount="true">
+	            <extension>
+						<fieldList>
+					  	    <field>
+							<name>@1.96.32</name>
+							<fieldspec>
+								<fieldname>@1.96.32</fieldname>
+							</fieldspec>
+						    </field>
+					  	    <field>
+							<name>temperature</name>
+							<fieldspec>
+								<fieldname>temperature</fieldname>
+							</fieldspec>
+						    </field>
+						</fieldList>
+				</extension>
+		    </output>
+        </reportSpec>
+    </reportSpecs>
+</ns2:ECSpec>

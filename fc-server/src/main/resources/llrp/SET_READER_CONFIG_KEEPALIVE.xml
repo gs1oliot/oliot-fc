@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<llrp:SET_READER_CONFIG xmlns:llrp="http://www.llrp.org/ltk/schema/core/encoding/xml/1.0" Version="1" MessageID="3">
+  <llrp:ResetToFactoryDefault>0</llrp:ResetToFactoryDefault>
+  <llrp:KeepaliveSpec>
+    <llrp:KeepaliveTriggerType>Periodic</llrp:KeepaliveTriggerType>
+    <llrp:PeriodicTriggerValue>10000</llrp:PeriodicTriggerValue>
+  </llrp:KeepaliveSpec>
+</llrp:SET_READER_CONFIG>
+

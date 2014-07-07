@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<llrp:ENABLE_ACCESSSPEC xmlns:llrp="http://www.llrp.org/ltk/schema/core/encoding/xml/1.0" Version="1" MessageID="0">
+  <llrp:AccessSpecID>3</llrp:AccessSpecID>
+</llrp:ENABLE_ACCESSSPEC>

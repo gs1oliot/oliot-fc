@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:ECSpec xmlns:ns2="urn:epcglobal:ale:xsd:1" includeSpecInReports="true">
+    <logicalReaders>
+        <logicalReader>LogicalReader1</logicalReader>
+    </logicalReaders>
+    <boundarySpec>
+        <repeatPeriod unit="MS">20000</repeatPeriod>
+        <duration unit="MS">19000</duration>
+        <stableSetInterval unit="MS">0</stableSetInterval>
+		<extension>
+			<whenDataAvailable>false</whenDataAvailable>
+		</extension>
+    </boundarySpec>
+    <reportSpecs>
+        <reportSpec reportIfEmpty="true" reportOnlyOnChange="true" reportName="report1">
+            <reportSet set="CURRENT"/>
+            <output includeRawHex="false" includeRawDecimal="false" includeEPC="true" includeTag="false" includeCount="true">
+		    </output>
+        </reportSpec>
+    </reportSpecs>
+</ns2:ECSpec>
