@@ -7,3 +7,5 @@ architecture-based IoT platform under the vision of Auto-ID Lab Korea, KAIST.
 
 
 For more information, please see the information at http://gs1oliot.github.io
+
+For mailing list, please see the Oliot-fc Google Group at https://groups.google.com/a/resl.kaist.ac.kr/forum/#!forum/oliot-fc
