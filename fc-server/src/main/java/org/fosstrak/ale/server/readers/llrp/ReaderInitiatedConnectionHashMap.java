@@ -6,48 +6,47 @@
 
 package org.fosstrak.ale.server.readers.llrp;
 
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ReaderInitiatedConnectionHashMap extends ConcurrentHashMap<String, ReaderInitiatedConnectionEntry> {
+public class ReaderInitiatedConnectionHashMap {
+	
+	private ConcurrentHashMap<String, ReaderInitiatedConnectionEntry> mapConnection = new ConcurrentHashMap<String, ReaderInitiatedConnectionEntry>();
+	
 
-	@Override
 	public ReaderInitiatedConnectionEntry get(Object key) {
 		String toUpperCase = ((String) key).toUpperCase();
-		return super.get(toUpperCase);
+		return mapConnection.get(toUpperCase);
 	}
 
-	@Override
 	public ReaderInitiatedConnectionEntry put(String key,
 			ReaderInitiatedConnectionEntry value) {
 		String toUpperCase = key.toUpperCase();
-		return super.put(toUpperCase, value);
+		return mapConnection.put(toUpperCase, value);
 	}
 
-	@Override
 	public boolean containsKey(Object key) {
 		String toUpperCase = ((String) key).toUpperCase();
-		return super.containsKey(toUpperCase);
+		return mapConnection.containsKey(toUpperCase);
 	}
 
-	@Override
 	public ReaderInitiatedConnectionEntry remove(Object key) {
 		String toUpperCase = ((String) key).toUpperCase();
-		return super.remove(toUpperCase);
+		return mapConnection.remove(toUpperCase);
 	}
 
-	@Override
 	public Set<String> keySet() {
 		Set<String> toReturn = new HashSet<String>();
-		for(String key : super.keySet()) {
-			toReturn.add(key.toUpperCase());
+		for (Enumeration<String> e = mapConnection.keys(); e.hasMoreElements();) {
+			toReturn.add(e.nextElement().toUpperCase());
 		}
 		return toReturn;
 	}
 	
 	public String findPhysicalReaderIdByIpPort(String addr, int port) {
-		for(ReaderInitiatedConnectionEntry e : super.values()) {
+		for(ReaderInitiatedConnectionEntry e : mapConnection.values()) {
 			if(e.getReaderAddr().equalsIgnoreCase(addr) && e.getPort() == port) {
 				return e.getPhysicalReaderId();
 			}
@@ -56,7 +55,7 @@ public class ReaderInitiatedConnectionHashMap extends ConcurrentHashMap<String, 
 	}
 	
 	public MultipleLLRPEndpoint getMultipleLLRPEndpointByIpPort(String addr, int port) {
-		for(ReaderInitiatedConnectionEntry e : super.values()) {
+		for(ReaderInitiatedConnectionEntry e : mapConnection.values()) {
 			if(e.getReaderAddr().equalsIgnoreCase(addr) && e.getPort() == port) {
 				return e.getEndpoint();
 			}
