@@ -5,19 +5,30 @@
 
 package kr.ac.kaist.resl;
 
-import java.util.List;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.xml.namespace.QName;
 
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.endpoint.Endpoint;
+import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
+import org.apache.ws.security.WSConstants;
+import org.apache.ws.security.WSPasswordCallback;
+import org.apache.ws.security.handler.WSHandlerConstants;
 import org.fosstrak.ale.util.DeserializerUtil;
 import org.fosstrak.ale.wsdl.ale.epcglobal.ALEServicePortType;
 import org.fosstrak.ale.wsdl.ale.epcglobal.DuplicateSubscriptionExceptionResponse;
-import org.fosstrak.ale.wsdl.ale.epcglobal.GetSubscribers;
 import org.fosstrak.ale.wsdl.ale.epcglobal.InvalidURIExceptionResponse;
 import org.fosstrak.ale.wsdl.ale.epcglobal.NoSuchNameExceptionResponse;
-import org.fosstrak.ale.wsdl.ale.epcglobal.NoSuchSubscriberExceptionResponse;
-import org.fosstrak.ale.wsdl.ale.epcglobal.Unsubscribe;
 import org.fosstrak.ale.wsdl.aleac.epcglobal.ALEACServicePortType;
 import org.fosstrak.ale.wsdl.aleac.epcglobal.ClientIdentityValidationExceptionResponse;
 import org.fosstrak.ale.wsdl.aleac.epcglobal.DefineClientIdentity;
@@ -40,143 +51,72 @@ import org.fosstrak.ale.wsdl.aleac.epcglobal.UndefineRole;
 import org.fosstrak.ale.wsdl.aleac.epcglobal.UnsupportedOperationExceptionResponse;
 import org.fosstrak.ale.wsdl.alecc.epcglobal.ALECCServicePortType;
 import org.fosstrak.ale.wsdl.alelr.epcglobal.ALELRServicePortType;
-import org.fosstrak.ale.wsdl.alelr.epcglobal.ImmutableReaderExceptionResponse;
 import org.fosstrak.ale.wsdl.alelr.epcglobal.ImplementationExceptionResponse;
-import org.fosstrak.ale.wsdl.alelr.epcglobal.InUseExceptionResponse;
-import org.fosstrak.ale.wsdl.alelr.epcglobal.Undefine;
 import org.fosstrak.ale.wsdl.aletm.epcglobal.ALETMServicePortType;
+import org.fosstrak.ale.wsdl.aletm.epcglobal.ArrayOfString;
 import org.fosstrak.ale.wsdl.aletm.epcglobal.DefineTMSpec;
 import org.fosstrak.ale.wsdl.aletm.epcglobal.EmptyParms;
 import org.fosstrak.ale.wsdl.aletm.epcglobal.SecurityExceptionResponse;
 import org.fosstrak.ale.xsd.ale.epcglobal.ACClientCredential;
 import org.fosstrak.ale.xsd.ale.epcglobal.ACClientIdentity;
-import org.fosstrak.ale.xsd.ale.epcglobal.ACPermission;
+import org.fosstrak.ale.xsd.ale.epcglobal.ACClientIdentity.Credentials;
+import org.fosstrak.ale.xsd.ale.epcglobal.ACPermission.Instances;
 import org.fosstrak.ale.xsd.ale.epcglobal.ACRole;
+import org.fosstrak.ale.xsd.ale.epcglobal.ACRole.PermissionNames;
+import org.fosstrak.ale.xsd.ale.epcglobal.ACPermission;
 import org.fosstrak.ale.xsd.ale.epcglobal.ECSpec;
 import org.fosstrak.ale.xsd.ale.epcglobal.LRSpec;
 import org.fosstrak.ale.xsd.ale.epcglobal.TMFixedFieldListSpec;
-import org.fosstrak.ale.xsd.ale.epcglobal.ACClientIdentity.Credentials;
-import org.fosstrak.ale.xsd.ale.epcglobal.ACPermission.Instances;
-import org.fosstrak.ale.xsd.ale.epcglobal.ACRole.PermissionNames;
 
 public class ApiExample {
 
+	public static String userId = "admin";
+	public static String password = "1111";
+	
+	
 	public static ALEServicePortType ale;
 	public static ALECCServicePortType alecc;
 	public static ALELRServicePortType alelr;
 	public static ALEACServicePortType aleac;
 	public static ALETMServicePortType aletm;
 
-	public static void main(String[] args) throws org.fosstrak.ale.wsdl.ale.epcglobal.ImplementationExceptionResponse, org.fosstrak.ale.wsdl.alecc.epcglobal.ImplementationExceptionResponse, org.fosstrak.ale.wsdl.aleac.epcglobal.ImplementationExceptionResponse, org.fosstrak.ale.wsdl.aletm.epcglobal.ImplementationExceptionResponse, ImplementationExceptionResponse {
-		String userId = "admin";
-
-		aletm = createAletm("http://211.43.180.76:8080/fc-server-1.2.0/services/ALETMService");
-		//defineTM("tempHumid", "C:\\Users\\Janggwan\\Desktop\\TMFixedFieldListSpec.xml");
+	public static void main(String[] args) throws Exception {
+		
+		aletm = createAletm("http://localhost:8080/fc-server-1.0.0/services/ALETMService");
+		//defineTM("urn:epc:pat:gid-96:*.*.*", "C:\\Users\\Janggwan\\Desktop\\TMFixedFieldListSpec.xml");
 		printTMSpecNames();
 
-		alelr = createAlelr("http://211.43.180.76:8080/fc-server-1.2.0/services/ALELRService");
-		//defineLR("limg00n_emulator2", "C:\\Users\\Janggwan\\Desktop\\LRSpec-TestLLRPReader2.xml");
-		//defineLR("test2", "C:\\Users\\Janggwan\\Desktop\\LRSpec-TestLLRPReader2.xml");
-		//undefineLR("limg00n_emulator2");
-		//undefineLR("test2");
+		alelr = createAlelr("http://localhost:8080/fc-server-1.0.0/services/ALELRService");
+		//defineLR("test", "C:\\Users\\Janggwan\\Desktop\\LRSpec.xml");
 		printReaderNames();
 		
 		
-		ale = createAle("http://211.43.180.76:8080/fc-server-1.2.0/services/ALEService");
-		
-		//getSubscribers(specName);
+		ale = createAle("http://localhost:8080/fc-server-1.0.0/services/ALEService");
 		//defineEC("eventcycle1", "C:\\Users\\Janggwan\\Desktop\\ECSpec_current.xml");
-		//undefineEC("eventcycle1");
-		//subscribe("eventcycle1", "http://limg00n.kaist.ac.kr:9999");
-		//unsubscribeEC("eventcycle1", "http://limg00n.kaist.ac.kr:9999");		
-		
-		//defineEC("eventcycle2", "C:\\Users\\Janggwan\\Desktop\\ECSpec_current2.xml");
-		//undefineEC("eventcycle2");
-		//subscribe("eventcycle2", "http://limg00n.kaist.ac.kr:9999");
-		//unsubscribeEC("eventcycle2", "http://limg00n.kaist.ac.kr:9999");
+		//subscribe("eventcycle1", "http://localhost:9999");
 		printECNames();
 		
+		alecc = createAlecc("http://localhost:8080/fc-server-1.0.0/services/ALECCService");
+
+		aleac = createAleac("http://localhost:8080/fc-server-1.0.0/services/ALEACService");
 		
-		/*
-		String addressCC = "http://localhost:8080/fc-server-1.2.0/services/ALECCService";
-		testALECC(addressCC);
-		*/
-		//aleac = createAleac("http://211.43.180.142:8080/fc-server-1.2.0/services/ALEACService");
+		//defineClientId("testuser", "1111");
+		//undefineClientId("testuser");
+		
+		//String[] perms = {"ALE.*"};defineRole("testRole", perms);
+		//undefineRole("testRole");
+		
+		//definePermission("ALE.poll");
+		//undefinePermission("ALE.poll");
+		
+		printClientIds();
+		printRoles();
+		printPerms();
+		
+		
+		
 	}
-	private static void getSubscribers(String specName)
-			throws org.fosstrak.ale.wsdl.ale.epcglobal.ImplementationExceptionResponse {
-		GetSubscribers getsubscribers = new GetSubscribers();
-		getsubscribers.setSpecName(specName);
-		try {
-			org.fosstrak.ale.wsdl.ale.epcglobal.ArrayOfString aos = ale.getSubscribers(getsubscribers);
-			System.out.print("subscribers of "+specName+" : ");
-			for(String subscriber : aos.getString()) {
-				System.out.print(subscriber+"\t");
-			}
-			System.out.println();
-		} catch (NoSuchNameExceptionResponse e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (org.fosstrak.ale.wsdl.ale.epcglobal.SecurityExceptionResponse e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	private static void undefineEC(String specName)
-			throws org.fosstrak.ale.wsdl.ale.epcglobal.ImplementationExceptionResponse {
-		try {
-			org.fosstrak.ale.wsdl.ale.epcglobal.Undefine undefineEC = new org.fosstrak.ale.wsdl.ale.epcglobal.Undefine();
-			undefineEC.setSpecName(specName);
-			ale.undefine(undefineEC);
-		} catch (NoSuchNameExceptionResponse e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (org.fosstrak.ale.wsdl.ale.epcglobal.SecurityExceptionResponse e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	private static void unsubscribeEC(String specName, String notiURI)
-			throws org.fosstrak.ale.wsdl.ale.epcglobal.ImplementationExceptionResponse {
-		try {
-			Unsubscribe unsubscribe = new Unsubscribe();
-			unsubscribe.setNotificationURI(notiURI);
-			unsubscribe.setSpecName(specName);
-			ale.unsubscribe(unsubscribe);
-		} catch (NoSuchSubscriberExceptionResponse e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchNameExceptionResponse e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (org.fosstrak.ale.wsdl.ale.epcglobal.SecurityExceptionResponse e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidURIExceptionResponse e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	private static void undefineLR(String readerName)
-			throws ImplementationExceptionResponse {
-		try {
-			Undefine undefineReader = new Undefine();
-			undefineReader.setName(readerName);
-			alelr.undefine(undefineReader);
-		} catch (org.fosstrak.ale.wsdl.alelr.epcglobal.SecurityExceptionResponse e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InUseExceptionResponse e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ImmutableReaderExceptionResponse e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (org.fosstrak.ale.wsdl.alelr.epcglobal.NoSuchNameExceptionResponse e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 	private static void printPermInfo(String permName)
 			throws org.fosstrak.ale.wsdl.aleac.epcglobal.ImplementationExceptionResponse {
 
@@ -501,7 +441,7 @@ public class ApiExample {
 			throws org.fosstrak.ale.wsdl.aletm.epcglobal.ImplementationExceptionResponse {
 		System.out.println("***** TMSpec Names *****");
 		try {
-			org.fosstrak.ale.wsdl.aletm.epcglobal.ArrayOfString aos = aletm.getTMSpecNames(new EmptyParms());
+			ArrayOfString aos = aletm.getTMSpecNames(new EmptyParms());
 			for(String s : aos.getString()) {
 				System.out.println(s);
 			}
@@ -517,6 +457,12 @@ public class ApiExample {
 
 	private static void defineLR(String specName, String path)
 			throws org.fosstrak.ale.wsdl.alelr.epcglobal.ImplementationExceptionResponse {
+		String standardVersion;
+		
+		//alelr.* can wired to alelr serviceportimpl. 
+		
+		standardVersion = alelr.getStandardVersion(new org.fosstrak.ale.wsdl.alelr.epcglobal.EmptyParms());
+		System.out.println("LR : " + standardVersion);
 		
 		try {
 			
@@ -604,30 +550,174 @@ public class ApiExample {
 		factory = new JaxWsProxyFactoryBean();
 		factory.setServiceClass(ALEServicePortType.class);
 		factory.setAddress(address);
-		return (ALEServicePortType)factory.create();
+		ALEServicePortType toReturn = (ALEServicePortType)factory.create();
+
+
+		CallbackHandler cpc = new CallbackHandler() {
+
+			@Override
+			public void handle(Callback[] callbacks) throws IOException,
+					UnsupportedCallbackException {
+				WSPasswordCallback pc = (WSPasswordCallback)callbacks[0];
+				pc.setPassword(password);
+				
+			}
+			
+		};
+		
+		Map<String, Object> outProps = new HashMap<String, Object>();
+		outProps.put(WSHandlerConstants.ACTION, WSHandlerConstants.USERNAME_TOKEN);
+		outProps.put(WSHandlerConstants.USER, userId);
+		outProps.put(WSHandlerConstants.PW_CALLBACK_REF, cpc);
+		outProps.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
+		
+		WSS4JOutInterceptor wssOut = new WSS4JOutInterceptor(outProps);
+		
+		
+		Client c = ClientProxy.getClient(toReturn);
+		Endpoint cxfEndpoint = c.getEndpoint();
+		cxfEndpoint.getOutInterceptors().add(wssOut);
+
+		return toReturn;
 	}
-	
+	private static ALECCServicePortType createAlecc(String address) {
+		JaxWsProxyFactoryBean factory;
+		factory = new JaxWsProxyFactoryBean();
+		factory.setServiceClass(ALECCServicePortType.class);
+		factory.setAddress(address);
+		ALECCServicePortType toReturn = (ALECCServicePortType)factory.create();
+
+		CallbackHandler cpc = new CallbackHandler() {
+
+			@Override
+			public void handle(Callback[] callbacks) throws IOException,
+					UnsupportedCallbackException {
+				WSPasswordCallback pc = (WSPasswordCallback)callbacks[0];
+				pc.setPassword(password);
+				
+			}
+			
+		};
+		
+		Map<String, Object> outProps = new HashMap<String, Object>();
+		outProps.put(WSHandlerConstants.ACTION, WSHandlerConstants.USERNAME_TOKEN);
+		outProps.put(WSHandlerConstants.USER, userId);
+		outProps.put(WSHandlerConstants.PW_CALLBACK_REF, cpc);
+		outProps.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
+		WSS4JOutInterceptor wssOut = new WSS4JOutInterceptor(outProps);
+		
+		
+		Client c = ClientProxy.getClient(toReturn);
+		Endpoint cxfEndpoint = c.getEndpoint();
+		cxfEndpoint.getOutInterceptors().add(wssOut);
+
+		return toReturn;
+	}
 	private static ALETMServicePortType createAletm(String address) {
 		JaxWsProxyFactoryBean factory;
 		factory = new JaxWsProxyFactoryBean();
 		factory.setServiceClass(ALETMServicePortType.class);
 		factory.setAddress(address);
-		return (ALETMServicePortType)factory.create();
-	}
+		
+		ALETMServicePortType toReturn = (ALETMServicePortType)factory.create();
+		
+		CallbackHandler cpc = new CallbackHandler() {
 
+			@Override
+			public void handle(Callback[] callbacks) throws IOException,
+					UnsupportedCallbackException {
+				WSPasswordCallback pc = (WSPasswordCallback)callbacks[0];
+				pc.setPassword(password);
+				
+			}
+			
+		};
+		
+		Map<String, Object> outProps = new HashMap<String, Object>();
+		outProps.put(WSHandlerConstants.ACTION, WSHandlerConstants.USERNAME_TOKEN);
+		outProps.put(WSHandlerConstants.USER, userId);
+		outProps.put(WSHandlerConstants.PW_CALLBACK_REF, cpc);
+		outProps.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
+		
+		WSS4JOutInterceptor wssOut = new WSS4JOutInterceptor(outProps);
+		
+		
+		Client c = ClientProxy.getClient(toReturn);
+		Endpoint cxfEndpoint = c.getEndpoint();
+		cxfEndpoint.getOutInterceptors().add(wssOut);
+		
+		return toReturn;
+		
+	}
 	private static ALELRServicePortType createAlelr(String address) {
 		JaxWsProxyFactoryBean factory;
 		factory = new JaxWsProxyFactoryBean();
 		factory.setServiceClass(ALELRServicePortType.class);
 		factory.setAddress(address);
-		return (ALELRServicePortType)factory.create();
+		ALELRServicePortType toReturn = (ALELRServicePortType)factory.create();
+		CallbackHandler cpc = new CallbackHandler() {
+
+			@Override
+			public void handle(Callback[] callbacks) throws IOException,
+					UnsupportedCallbackException {
+				WSPasswordCallback pc = (WSPasswordCallback)callbacks[0];
+				pc.setPassword(password);
+				
+			}
+			
+		};
+		
+		Map<String, Object> outProps = new HashMap<String, Object>();
+		outProps.put(WSHandlerConstants.ACTION, WSHandlerConstants.USERNAME_TOKEN);
+		outProps.put(WSHandlerConstants.USER, userId);
+		outProps.put(WSHandlerConstants.PW_CALLBACK_REF, cpc);
+		outProps.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
+		
+		
+		WSS4JOutInterceptor wssOut = new WSS4JOutInterceptor(outProps);
+		
+		
+		Client c = ClientProxy.getClient(toReturn);
+		Endpoint cxfEndpoint = c.getEndpoint();
+		cxfEndpoint.getOutInterceptors().add(wssOut);
+		
+		return toReturn;
 	}
 	private static ALEACServicePortType createAleac(String address) {
 		JaxWsProxyFactoryBean factory;
 		factory = new JaxWsProxyFactoryBean();
 		factory.setServiceClass(ALEACServicePortType.class);
 		factory.setAddress(address);
-		return (ALEACServicePortType)factory.create();
+		
+		ALEACServicePortType toReturn = (ALEACServicePortType)factory.create();
+		
+
+		CallbackHandler cpc = new CallbackHandler() {
+
+			@Override
+			public void handle(Callback[] callbacks) throws IOException,
+					UnsupportedCallbackException {
+				WSPasswordCallback pc = (WSPasswordCallback)callbacks[0];
+				pc.setPassword(password);
+				
+			}
+			
+		};
+		
+		Map<String, Object> outProps = new HashMap<String, Object>();
+		outProps.put(WSHandlerConstants.ACTION, WSHandlerConstants.USERNAME_TOKEN);
+		outProps.put(WSHandlerConstants.USER, userId);
+		outProps.put(WSHandlerConstants.PW_CALLBACK_REF, cpc);
+		outProps.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
+		
+		WSS4JOutInterceptor wssOut = new WSS4JOutInterceptor(outProps);
+		
+		
+		Client c = ClientProxy.getClient(toReturn);
+		Endpoint cxfEndpoint = c.getEndpoint();
+		cxfEndpoint.getOutInterceptors().add(wssOut);
+		
+		return toReturn;
 	}
 	
 }
