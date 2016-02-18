@@ -7,11 +7,11 @@
 
   <artifactId>fc-webclient</artifactId>
   <groupId>org.oliot</groupId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
 	<parent>
 		<artifactId>fc</artifactId>
 		<groupId>org.oliot</groupId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
   <packaging>war</packaging>
   <modelVersion>4.0.0</modelVersion>

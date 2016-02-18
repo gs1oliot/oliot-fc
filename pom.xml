@@ -7,7 +7,7 @@
 
 	<artifactId>fc</artifactId>
 	<groupId>org.oliot</groupId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modelVersion>4.0.0</modelVersion>
         <parent>
