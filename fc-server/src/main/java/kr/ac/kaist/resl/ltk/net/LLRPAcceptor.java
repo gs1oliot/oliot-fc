@@ -13,6 +13,7 @@ import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
+import org.apache.mina.filter.executor.OrderedThreadPoolExecutor;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 
@@ -121,7 +122,7 @@ public class LLRPAcceptor extends LLRPConnection  {
 	 */
 	
 	public void bind(long timeout) throws LLRPConnectionAttemptFailedException{
-		ExecutorService executor = Executors.newCachedThreadPool();
+		ExecutorService executor = new OrderedThreadPoolExecutor();
 		
 		acceptor = new NioSocketAcceptor(Runtime.getRuntime().availableProcessors());
 		acceptor.getFilterChain().addLast("executor", new ExecutorFilter(executor));
