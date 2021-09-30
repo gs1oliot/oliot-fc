@@ -199,6 +199,11 @@ public abstract class AbstractTab extends JPanel {
 	 */
 	protected Object getProxy() throws FosstrakAleClientException {
 		if (null == m_proxy) {
+
+			// Needed to get rig of CXF exception
+			// "Cannot create a secure XMLInputFactory"
+			System.setProperty("org.apache.cxf.stax.allowInsecureParser", "true");
+
 			// display the connect dialog
 			String address = FosstrakAleClient.instance().showConnectDialog(m_endpointKey);
 			
@@ -208,7 +213,7 @@ public abstract class AbstractTab extends JPanel {
 			
 			JaxWsProxyFactoryBean factory;
 			factory = new JaxWsProxyFactoryBean();
-			factory.setServiceClass(ALETMServicePortType.class);
+			factory.setServiceClass(m_clzz);
 			factory.setAddress(address);
 			
 			Object toReturn = factory.create();
@@ -243,7 +248,7 @@ public abstract class AbstractTab extends JPanel {
 			m_proxy = toReturn;
 			
 			// we try to perform a test method call.
-			// if that call fails, we assume the connection to be daad.
+			// if that call fails, we assume the connection to be down.
 			try {
 				m_testMethod.invoke(m_proxy, m_testMethodParameter);
 			} catch (Exception e) {
