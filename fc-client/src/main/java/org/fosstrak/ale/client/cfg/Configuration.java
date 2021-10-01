@@ -163,6 +163,14 @@ public class Configuration {
 	public int getPropertyAsInteger(String key) {
 		return Integer.parseInt(m_properties.getProperty(key));
 	}
+
+	/**
+	 * @param key the key (eg. org.fosstrak.ale.client.windowHeight).
+	 * @return a property uniquely identified by the given key.
+	 */
+	public boolean getPropertyAsBoolean(String key) {
+		return Boolean.parseBoolean(m_properties.getProperty(key, "false"));
+	}
 	
 	/**
 	 * @return the font specified in the configuration. the font is created only once and is 

@@ -200,55 +200,55 @@ public abstract class AbstractTab extends JPanel {
 	protected Object getProxy() throws FosstrakAleClientException {
 		if (null == m_proxy) {
 
-			// Needed to get rig of CXF exception
-			// "Cannot create a secure XMLInputFactory"
+			// Needed to get rid of CXF exception: "Cannot create a secure XMLInputFactory"
+			// Doesn't matter if security is used or not
 			System.setProperty("org.apache.cxf.stax.allowInsecureParser", "true");
 
-			// display the connect dialog
+			// display the connection endpoint dialog
 			String address = FosstrakAleClient.instance().showConnectDialog(m_endpointKey);
-			
-			// create the proxy object.
-			
-			String userId = FosstrakAleClient.instance().getConfiguration().getProperty("userId");
-			
+
+			// Create service factory
 			JaxWsProxyFactoryBean factory;
 			factory = new JaxWsProxyFactoryBean();
 			factory.setServiceClass(m_clzz);
 			factory.setAddress(address);
-			
 			Object toReturn = factory.create();
-			
-			CallbackHandler cpc = new CallbackHandler() {
 
-				@Override
-				public void handle(Callback[] callbacks) throws IOException,
-						UnsupportedCallbackException {
-					WSPasswordCallback pc = (WSPasswordCallback)callbacks[0];
-					String password = FosstrakAleClient.instance().getConfiguration().getProperty("password");
-					pc.setPassword(password);
-					
-				}
-				
-			};
+			// Use SOAP WS-Security or not ?
+			boolean useWsse = FosstrakAleClient.instance().getConfiguration().getPropertyAsBoolean("useWsse");
+			if (useWsse) {
 
-			Map<String, Object> outProps = new HashMap<String, Object>();
-			outProps.put(WSHandlerConstants.ACTION, WSHandlerConstants.USERNAME_TOKEN);
-			outProps.put(WSHandlerConstants.USER, userId);
-			outProps.put(WSHandlerConstants.PW_CALLBACK_REF, cpc);
-			outProps.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
-			
-			WSS4JOutInterceptor wssOut = new WSS4JOutInterceptor(outProps);
-			
-			
-			Client c = ClientProxy.getClient(toReturn);
-			Endpoint cxfEndpoint = c.getEndpoint();
-			cxfEndpoint.getOutInterceptors().add(wssOut);
-			
-			
+				// Get username and password from configuration
+				String userId = FosstrakAleClient.instance().getConfiguration().getProperty("userId");
+				CallbackHandler cpc = new CallbackHandler() {
+
+					@Override
+					public void handle(Callback[] callbacks) throws IOException,
+							UnsupportedCallbackException {
+						WSPasswordCallback pc = (WSPasswordCallback) callbacks[0];
+						String password = FosstrakAleClient.instance().getConfiguration().getProperty("password");
+						pc.setPassword(password);
+					}
+
+				};
+
+				Map<String, Object> outProps = new HashMap<String, Object>();
+				outProps.put(WSHandlerConstants.ACTION, WSHandlerConstants.USERNAME_TOKEN);
+				outProps.put(WSHandlerConstants.USER, userId);
+				outProps.put(WSHandlerConstants.PW_CALLBACK_REF, cpc);
+				outProps.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
+
+				WSS4JOutInterceptor wssOut = new WSS4JOutInterceptor(outProps);
+
+				Client c = ClientProxy.getClient(toReturn);
+				Endpoint cxfEndpoint = c.getEndpoint();
+				cxfEndpoint.getOutInterceptors().add(wssOut);
+			}
+
 			m_proxy = toReturn;
 			
-			// we try to perform a test method call.
-			// if that call fails, we assume the connection to be down.
+			// We try to perform a test method call.
+			// If that call fails, we assume the connection to be down.
 			try {
 				m_testMethod.invoke(m_proxy, m_testMethodParameter);
 			} catch (Exception e) {
