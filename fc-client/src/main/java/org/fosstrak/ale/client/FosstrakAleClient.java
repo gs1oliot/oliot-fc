@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
@@ -316,7 +317,7 @@ public class FosstrakAleClient extends JFrame  {
 	/**
 	 * @param args command line arguments.
 	 */
-	public static void main(String[] args) throws FosstrakAleClientException {
+	public static void main(String[] args) throws FosstrakAleClientException, FileNotFoundException {
 		for (String arg : args) {
 			if ("help".equalsIgnoreCase(arg)) help();
 			if ("-h".equalsIgnoreCase(arg)) help();
@@ -326,7 +327,7 @@ public class FosstrakAleClient extends JFrame  {
 		// configure Logger with properties file
 		try {
 			Properties p = new Properties();
-			p.load(FosstrakAleClient.class.getResourceAsStream("/log4j.properties"));
+			p.load(FosstrakAleClient.class.getResourceAsStream("/props/log4j.properties"));
 			PropertyConfigurator.configure(p);
 			s_log.debug("configured the logger.");
 		} catch (Exception e) {

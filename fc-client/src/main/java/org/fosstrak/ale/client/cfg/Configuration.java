@@ -22,10 +22,16 @@ package org.fosstrak.ale.client.cfg;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.apache.tools.ant.types.Path;
 import org.fosstrak.ale.client.exception.FosstrakAleClientException;
 
 /**
@@ -52,21 +58,37 @@ public class Configuration {
 	 * @param cmdLine the command line array.
 	 * @throws FosstrakAleClientException when the configuration could not be obtained.
 	 */
-	private Configuration(String[] cmdLine) throws FosstrakAleClientException {
+	private Configuration(String[] cmdLine) throws FosstrakAleClientException, FileNotFoundException {
 		
-		String file = PROPERTIES_FILE_LOCATION;
-		if (cmdLine.length > 0) file = cmdLine[0];
-		
-		s_log.info(String.format("using configuration file '%s'", file));
-		
-		// load properties
-		InputStream inputStream = this.getClass().getResourceAsStream(file);
+		String cfgPath = PROPERTIES_FILE_LOCATION;
+		InputStream inputStream;
+
+		if (cmdLine.length > 0) cfgPath = cmdLine[0];
+
+		// Check if "cfgPath" is an existing resource
+		if (this.getClass().getResource(cfgPath) != null) {
+			s_log.info(String.format("using configuration resource '%s'", cfgPath));
+			inputStream = this.getClass().getResourceAsStream(cfgPath);
+		}
+		// Check if "cfgPath" is an existing file
+		else if (Files.exists(Paths.get(cfgPath)))
+		{
+			s_log.info(String.format("using configuration file '%s'", cfgPath));
+			File cfgFile = new File(cfgPath);
+			inputStream = new FileInputStream(cfgFile);
+		}
+		else
+		{
+			throw new FosstrakAleClientException(String.format("'%s' is not a resource neither a file", cfgPath));
+		}
+
+		// load properties from stream
 		try {
 			m_properties = new Properties();
 			m_properties.load(inputStream);
 		} catch (Exception e) {
 			m_properties = null;
-			s_log.error(String.format("could not load configuration file '%s'", file));
+			s_log.error(String.format("could not load configuration from '%s'", cfgPath));
 			throw new FosstrakAleClientException(e);
 		}
 	}
@@ -176,7 +198,7 @@ public class Configuration {
 	 * @return a configuration
 	 * @throws FosstrakAleClientException when the configuration could not be obtained.
 	 */
-	public static Configuration getConfiguration(String[] cmdLine) throws FosstrakAleClientException {
+	public static Configuration getConfiguration(String[] cmdLine) throws FosstrakAleClientException, FileNotFoundException {
 		return new Configuration(cmdLine);
 	}
 	
@@ -185,7 +207,7 @@ public class Configuration {
 	 * @return a configuration
 	 * @throws FosstrakAleClientException when the configuration could not be obtained.
 	 */
-	public static Configuration getConfigurtionDefaultConfig() throws FosstrakAleClientException {
+	public static Configuration getConfigurtionDefaultConfig() throws FosstrakAleClientException, FileNotFoundException {
 		return getConfiguration(new String[] {} );
 	}
 }
