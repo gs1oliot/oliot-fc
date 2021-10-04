@@ -554,9 +554,13 @@ public class LLRPAdaptor extends BaseReader {
 		}
 
 		ReaderInitiatedConnectionEntry entry = null;
-		if((entry = PhysicalReaderAcceptor.mapIdAndReaderInitiatedConnectionEntry.get(physicalReaderId)) != null) {
-			MultipleLLRPEndpoint endpoints = entry.getEndpoint();
-			endpoints.removeLLRPEndpoint((ReaderImpl)reader);
+
+		// Physical reader connection might have failed, so can't trust that it is mapped.
+		if ((physicalReaderId != null) && (PhysicalReaderAcceptor.mapIdAndReaderInitiatedConnectionEntry.containsKey(physicalReaderId))) {
+			if ((entry = PhysicalReaderAcceptor.mapIdAndReaderInitiatedConnectionEntry.get(physicalReaderId)) != null) {
+				MultipleLLRPEndpoint endpoints = entry.getEndpoint();
+				endpoints.removeLLRPEndpoint((ReaderImpl) reader);
+			}
 		}
 	}
 
