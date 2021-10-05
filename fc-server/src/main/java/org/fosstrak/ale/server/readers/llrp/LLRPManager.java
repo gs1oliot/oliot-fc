@@ -45,7 +45,7 @@ import org.springframework.stereotype.Service;
 public class LLRPManager implements LLRPExceptionHandler, MessageHandler {
 	
 	/** the path to the configuration file. */
-	public static final String CONFIGURATION_FILE = "/llrpAdaptorConfiguration.properties";
+	public static final String CONFIGURATION_FILE = "/LLRPAdaptorConfig.properties";
 	
 	/** the name of the property of the adapter management configuration file.*/
 	public static final String PROP_MGMT_CFG = "mgmt";

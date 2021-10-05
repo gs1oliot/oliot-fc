@@ -322,8 +322,8 @@ public class ReaderImpl extends UnicastRemoteObject implements LLRPEndpoint, Rea
 	private void sendLLRPMessage(LLRPMessage llrpMessage) throws RemoteException {
 		try {
 			// send the message asynchronous.
-			//connector.send(llrpMessage);
-			ioSession.write(llrpMessage);
+			connector.send(llrpMessage);
+			//ioSession.write(llrpMessage); // TODO Oliot project used this instead connector.send
 			metaData._packageSent();
 		} catch (NullPointerException npe) {
 			// a null-pointer exception occurs when the reader is no more connected.
