@@ -51,12 +51,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.fosstrak.ale.client.cfg.Configuration;
 import org.fosstrak.ale.client.exception.FosstrakAleClientException;
-import org.fosstrak.ale.client.tabs.ALEACClient;
-import org.fosstrak.ale.client.tabs.ALECCClient;
-import org.fosstrak.ale.client.tabs.ALEClient;
-import org.fosstrak.ale.client.tabs.ALELRClient;
-import org.fosstrak.ale.client.tabs.ALETMClient;
-import org.fosstrak.ale.client.tabs.EventSink;
+import org.fosstrak.ale.client.tabs.*;
 
 /**
  * @author swieland
@@ -122,12 +117,15 @@ public class FosstrakAleClient extends JFrame  {
 			tmClient.initialize();
 			ALEACClient acClient = new ALEACClient(this);
 			acClient.initialize();
+			LLRPClient llrpClient = new LLRPClient(this);
+			llrpClient.initialize();
 			
 			m_tab.addTab("Event Cycle", aleClient);
 			m_tab.addTab("Command Cycle", aleCCClient);
 			m_tab.addTab("Logical Reader", lrClient);
 			m_tab.addTab("Tag Memory", tmClient);
 			m_tab.addTab("Access Control", acClient);
+			m_tab.addTab("LLRP", llrpClient);
         } catch (Exception e) {
         	s_log.error("Could not setup basic GUI components.");
         	throw new FosstrakAleClientException(e);

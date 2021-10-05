@@ -18,30 +18,30 @@
 	</appender>
 
 	<category name="org.fosstrak">
-		<priority value="INFO" />
+		<priority value="DEBUG" />
 		<!-- priority value="DEBUG" /-->
 	</category>
 
 	<category name="org.fosstrak.ale">
-		<priority value="INFO" />
+		<priority value="DEBUG" />
 		<!-- priority value="DEBUG" /-->
 	</category>
 	
 	<category name="org.fosstrak.hal.impl.sim.BatchSimulator">
-		<priority value="ERROR" />
+		<priority value="DEBUG" />
 	</category>
 	
 	<category name="org.fosstrak.hal.impl.sim.SimulatorController">
-		<priority value="ERROR" />
+		<priority value="DEBUG" />
 	</category>
 	
 	<category name="org.llrp.ltk">
 		<!-- priority value="DEBUG" /-->
-		<priority value="ERROR" />
+		<priority value="DEBUG" />
 	</category>
 	
 	<category name="kr.ac.kaist.resl.ltk.generated">
-		<priority value="ERROR" />
+		<priority value="DEBUG" />
 		<!-- priority value="DEBUG" /-->
 	</category>
 	

@@ -237,6 +237,7 @@ public abstract class AbstractTab extends JPanel {
 				outProps.put(WSHandlerConstants.USER, userId);
 				outProps.put(WSHandlerConstants.PW_CALLBACK_REF, cpc);
 				outProps.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
+				outProps.put(WSHandlerConstants.MUST_UNDERSTAND, "false");
 
 				WSS4JOutInterceptor wssOut = new WSS4JOutInterceptor(outProps);
 
@@ -247,13 +248,15 @@ public abstract class AbstractTab extends JPanel {
 
 			m_proxy = toReturn;
 			
-			// We try to perform a test method call.
-			// If that call fails, we assume the connection to be down.
-			try {
-				m_testMethod.invoke(m_proxy, m_testMethodParameter);
-			} catch (Exception e) {
-				m_proxy = null;
-				throw new FosstrakAleClientServiceDownException(e);
+			// We try to perform a test method call (if it's defined)
+			if (m_testMethod != null) {
+				// If that call fails, we assume the connection to be down.
+				try {
+					m_testMethod.invoke(m_proxy, m_testMethodParameter);
+				} catch (Exception e) {
+					m_proxy = null;
+					throw new FosstrakAleClientServiceDownException(e);
+				}
 			}
 		}
 		return m_proxy;
