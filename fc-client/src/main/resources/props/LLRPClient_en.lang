@@ -40,8 +40,9 @@ DetailsPanelTitle = Exception Details
 
 Command1 = define
 Command2 = undefine
-Command3 = start
-Command4 = stop
-Command5 = enable
-Command6 = disable
-Command7 = disableAll
+Command3 = readSpecNames
+Command4 = start
+Command5 = stop
+Command6 = enable
+Command7 = disable
+Command8 = disableAll

@@ -85,11 +85,13 @@ public class LLRPClient extends AbstractTab {
 
     private static final int CMD__DEFINE_LLRP = 1;
     private static final int CMD__UNDEFINE_LLRP = 2;
-    private static final int CMD__START_LLRP = 3;
-    private static final int CMD__STOP_LLRP = 4;
-    private static final int CMD__ENABLE_LLRP = 5;
-    private static final int CMD__DISABLE_LLRP = 6;
-    private static final int CMD__DISABLE_ALL_LLRP = 7;
+    private static final int CMD__GET_SPEC_NAMES = 3;
+    private static final int CMD__START_LLRP = 4;
+    private static final int CMD__STOP_LLRP = 5;
+    private static final int CMD__ENABLE_LLRP = 6;
+    private static final int CMD__DISABLE_LLRP = 7;
+    private static final int CMD__DISABLE_ALL_LLRP = 8;
+    private static final int NUM_OF_CMD = 8;
 
     /**
      * @param parent the parent frame.
@@ -136,8 +138,12 @@ public class LLRPClient extends AbstractTab {
             case CMD__ENABLE_LLRP:
             case CMD__DISABLE_LLRP:
                 m_commandPanel.setLayout(new GridLayout(5, 1, 5, 0));
-                addSpecNameValueField(m_commandPanel);
+                addSpecNameComboBox(m_commandPanel);
                 addSeparator(m_commandPanel);
+                break;
+
+            case CMD__GET_SPEC_NAMES:
+                m_commandPanel.setLayout(new GridLayout(1, 1, 5, 0));
                 break;
 
             case CMD__DISABLE_ALL_LLRP:
@@ -168,6 +174,35 @@ public class LLRPClient extends AbstractTab {
         panel.add(m_specNameValueField);
     }
 
+    /**
+     * This method adds a specification name combobox to the panel.
+     *
+     * @param panel to which the specification name combobox should be added
+     */
+    private void addSpecNameComboBox(JPanel panel) {
+
+        m_specNameComboBox = new JComboBox();
+        m_specNameComboBox.setFont(m_font);
+        m_specNameComboBox.setEditable(false);
+
+        List<String> roSpecNames = null;
+        try {
+            roSpecNames = getLLRPServiceProxy().getSpecNames();
+        } catch (Exception e) {
+        }
+        if (roSpecNames != null && roSpecNames.size() > 0) {
+            for (String specName : roSpecNames) {
+                m_specNameComboBox.addItem(specName);
+            }
+        } else {
+            m_specNameComboBox.addItem("no specs defined");
+        }
+        JLabel lbl = new JLabel(m_guiText.getString("SpecNameLabel"));
+        lbl.setFont(m_font);
+        panel.add(lbl);
+        panel.add(m_specNameComboBox);
+    }
+
     @Override
     protected void executeCommand() {
 
@@ -195,12 +230,12 @@ public class LLRPClient extends AbstractTab {
                         break;
                     }
 
-                    // File exists?
-                    if (Files.notExists(Paths.get(filePath)))
+                    // File exists? - We can't check that if file is in remote server.
+                    /*if (Files.notExists(Paths.get(filePath)))
                     {
                         FosstrakAleClient.instance().showExceptionDialog(m_guiText.getString("FileNotFoundDialog"));
                         break;
-                    }
+                    }*/
 
                     // Define
                     getLLRPServiceProxy().define(specName, filePath);
@@ -242,6 +277,10 @@ public class LLRPClient extends AbstractTab {
                             break;
                     }
 
+                    break;
+
+                case CMD__GET_SPEC_NAMES:
+                    result = getLLRPServiceProxy().getSpecNames();
                     break;
 
                 case CMD__DISABLE_ALL_LLRP:
@@ -303,14 +342,24 @@ public class LLRPClient extends AbstractTab {
                     sb.append("\n");
                 }
             }
+        } else if ((result instanceof List) && (((List)result).size() > 0) && (((List)result).get(0) instanceof String)) {
+            List<String> resultStringList = (List<String>) result;
+            if (resultStringList.size() == 0) {
+                sb.append(m_guiText.getString("EmptyArray"));
+            } else {
+                for (String s : resultStringList) {
+                    sb.append(s);
+                    sb.append("\n");
+                }
+            }
         }
     }
 
     @Override
     protected String[] getCommands() {
 
-        String[] commands = new String[7];
-        for (int i = 1; i <= 7; i++) {
+        String[] commands = new String[NUM_OF_CMD];
+        for (int i = 1; i <= NUM_OF_CMD; i++) {
             commands[i - 1] = m_guiText.getString("Command" + i);
         }
         return commands;
