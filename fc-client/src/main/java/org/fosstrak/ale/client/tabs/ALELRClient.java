@@ -184,6 +184,7 @@ public class ALELRClient extends AbstractTab {
 		
 		m_specNameComboBox = new JComboBox();
 		m_specNameComboBox.setFont(m_font);
+		m_specNameComboBox.setEditable(false);
 		m_specNameComboBox.addItem(null);
 		
 		List<String> lrSpecNames = null;
@@ -195,6 +196,7 @@ public class ALELRClient extends AbstractTab {
 			for (String specName : lrSpecNames) {
 				m_specNameComboBox.addItem(specName);
 			}
+			m_specNameComboBox.setSelectedIndex(1);
 		} else {
 			m_specNameComboBox.addItem("no specs defined");
 		}

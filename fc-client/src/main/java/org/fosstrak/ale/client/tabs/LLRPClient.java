@@ -184,6 +184,7 @@ public class LLRPClient extends AbstractTab {
         m_specNameComboBox = new JComboBox();
         m_specNameComboBox.setFont(m_font);
         m_specNameComboBox.setEditable(false);
+        m_specNameComboBox.addItem(null);
 
         List<String> roSpecNames = null;
         try {
@@ -194,9 +195,11 @@ public class LLRPClient extends AbstractTab {
             for (String specName : roSpecNames) {
                 m_specNameComboBox.addItem(specName);
             }
+            m_specNameComboBox.setSelectedIndex(1);
         } else {
             m_specNameComboBox.addItem("no specs defined");
         }
+
         JLabel lbl = new JLabel(m_guiText.getString("SpecNameLabel"));
         lbl.setFont(m_font);
         panel.add(lbl);
@@ -248,10 +251,9 @@ public class LLRPClient extends AbstractTab {
                 case CMD__ENABLE_LLRP:
                 case CMD__DISABLE_LLRP:
                     // get specName
-                    specName = m_specNameValueField.getText();
+                    specName = (String)m_specNameComboBox.getSelectedItem();
                     if (specName == null || "".equals(specName)) {
-                        FosstrakAleClient.instance().showExceptionDialog(
-                                m_guiText.getString("SpecNameNotSpecifiedDialog"));
+                        FosstrakAleClient.instance().showExceptionDialog(m_guiText.getString("SpecNameNotSpecifiedDialog"));
                         break;
                     }
 

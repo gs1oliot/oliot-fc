@@ -220,6 +220,7 @@ public class ALECCClient extends AbstractTab {
 		m_specNameComboBox = new JComboBox();
 		m_specNameComboBox.setFont(m_font);
 		m_specNameComboBox.setEditable(false);
+		m_specNameComboBox.addItem(null);
 
 		List<String> ccSpecNames = null;
 		try {
@@ -230,9 +231,11 @@ public class ALECCClient extends AbstractTab {
 			for (String specName : ccSpecNames) {
 				m_specNameComboBox.addItem(specName);
 			}
+			m_specNameComboBox.setSelectedIndex(1);
 		} else {
 			m_specNameComboBox.addItem("no specs defined");
 		}
+
 		JLabel lbl = new JLabel(m_guiText.getString("SpecNameLabel"));
 		lbl.setFont(m_font);
 		panel.add(lbl);
