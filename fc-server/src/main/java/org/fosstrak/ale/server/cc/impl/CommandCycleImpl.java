@@ -239,6 +239,11 @@ public final class CommandCycleImpl implements CommandCycle, Runnable {
 		}
 		
 		for (LogicalReader logicalReader : logicalReaders) {
+
+			// Start the reader
+			if (!logicalReader.isStarted()) {
+				logicalReader.start();
+			}
 			
 			// subscribe this command cycle to the logical readers
 			LOG.debug("registering CommandCycle " + name + " on reader " + logicalReader.getName());

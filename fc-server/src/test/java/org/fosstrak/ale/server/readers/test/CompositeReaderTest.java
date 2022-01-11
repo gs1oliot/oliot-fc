@@ -145,6 +145,9 @@ public class CompositeReaderTest {
 
 		LogicalReader logicalReader = EasyMock.createMock(LogicalReader.class);
 		EasyMock.expect(logicalReader.getName()).andReturn(logicalReaderName1).atLeastOnce();
+		EasyMock.expect(logicalReader.isStarted()).andReturn(false).once();
+		logicalReader.start();
+		EasyMock.expectLastCall().once();
 		logicalReader.addObserver(compositeReader);
 		EasyMock.expectLastCall();
 		logicalReader.deleteObserver(compositeReader);

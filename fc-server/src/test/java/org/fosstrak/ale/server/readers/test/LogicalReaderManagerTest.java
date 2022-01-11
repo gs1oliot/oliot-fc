@@ -107,15 +107,10 @@ public class LogicalReaderManagerTest {
 		
 		LogicalReader logicalReader1 = EasyMock.createMock(LogicalReader.class);
 		EasyMock.expect(logicalReader1.getName()).andReturn("reader1").atLeastOnce();
-		EasyMock.expect(logicalReader1.isStarted()).andReturn(false).atLeastOnce();
-		// start is invoked at least once (as mock is always returning not-started).
-		logicalReader1.start();
-		EasyMock.expectLastCall().atLeastOnce();
 		EasyMock.replay(logicalReader1);
 		
 		LogicalReader logicalReader2 = EasyMock.createMock(LogicalReader.class);
 		EasyMock.expect(logicalReader2.getName()).andReturn("reader2").atLeastOnce();
-		EasyMock.expect(logicalReader2.isStarted()).andReturn(true).atLeastOnce();
 		EasyMock.replay(logicalReader2);
 		
 		// test setters and getters -----------------
