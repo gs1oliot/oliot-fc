@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
@@ -50,12 +51,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.fosstrak.ale.client.cfg.Configuration;
 import org.fosstrak.ale.client.exception.FosstrakAleClientException;
-import org.fosstrak.ale.client.tabs.ALEACClient;
-import org.fosstrak.ale.client.tabs.ALECCClient;
-import org.fosstrak.ale.client.tabs.ALEClient;
-import org.fosstrak.ale.client.tabs.ALELRClient;
-import org.fosstrak.ale.client.tabs.ALETMClient;
-import org.fosstrak.ale.client.tabs.EventSink;
+import org.fosstrak.ale.client.tabs.*;
 
 /**
  * @author swieland
@@ -121,12 +117,15 @@ public class FosstrakAleClient extends JFrame  {
 			tmClient.initialize();
 			ALEACClient acClient = new ALEACClient(this);
 			acClient.initialize();
+			LLRPClient llrpClient = new LLRPClient(this);
+			llrpClient.initialize();
 			
 			m_tab.addTab("Event Cycle", aleClient);
 			m_tab.addTab("Command Cycle", aleCCClient);
 			m_tab.addTab("Logical Reader", lrClient);
 			m_tab.addTab("Tag Memory", tmClient);
 			m_tab.addTab("Access Control", acClient);
+			m_tab.addTab("LLRP", llrpClient);
         } catch (Exception e) {
         	s_log.error("Could not setup basic GUI components.");
         	throw new FosstrakAleClientException(e);
@@ -316,7 +315,7 @@ public class FosstrakAleClient extends JFrame  {
 	/**
 	 * @param args command line arguments.
 	 */
-	public static void main(String[] args) throws FosstrakAleClientException {
+	public static void main(String[] args) throws FosstrakAleClientException, FileNotFoundException {
 		for (String arg : args) {
 			if ("help".equalsIgnoreCase(arg)) help();
 			if ("-h".equalsIgnoreCase(arg)) help();
@@ -326,7 +325,7 @@ public class FosstrakAleClient extends JFrame  {
 		// configure Logger with properties file
 		try {
 			Properties p = new Properties();
-			p.load(FosstrakAleClient.class.getResourceAsStream("/log4j.properties"));
+			p.load(FosstrakAleClient.class.getResourceAsStream("/props/log4j.properties"));
 			PropertyConfigurator.configure(p);
 			s_log.debug("configured the logger.");
 		} catch (Exception e) {

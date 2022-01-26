@@ -193,6 +193,7 @@ public class ALETMClient extends AbstractTab {
 		m_specNameComboBox = new JComboBox();
 		m_specNameComboBox.setFont(m_font);
 		m_specNameComboBox.setEditable(false);
+		m_specNameComboBox.addItem(null);
 
 		List<String> ecSpecNames = null;
 		try {
@@ -203,9 +204,11 @@ public class ALETMClient extends AbstractTab {
 			for (String specName : ecSpecNames) {
 				m_specNameComboBox.addItem(specName);
 			}
+			m_specNameComboBox.setSelectedIndex(1);
 		} else {
 			m_specNameComboBox.addItem("no specs defined");
 		}
+
 		JLabel lbl = new JLabel(m_guiText.getString("SpecNameLabel"));
 		lbl.setFont(m_font);
 		panel.add(lbl);

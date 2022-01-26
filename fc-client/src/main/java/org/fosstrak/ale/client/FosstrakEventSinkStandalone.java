@@ -1,5 +1,6 @@
 package org.fosstrak.ale.client;
 
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.Properties;
 
@@ -57,7 +58,7 @@ public class FosstrakEventSinkStandalone extends JFrame {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) throws FosstrakAleClientException {
+	public static void main(String[] args) throws FosstrakAleClientException, FileNotFoundException {
 		for (String arg : args) {
 			if ("help".equalsIgnoreCase(arg)) help();
 			if ("-h".equalsIgnoreCase(arg)) help();
