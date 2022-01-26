@@ -23,6 +23,7 @@
 
 package org.fosstrak.ale.server.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
@@ -37,6 +38,7 @@ import java.util.Set;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.log4j.Logger;
 import org.fosstrak.ale.exception.ECSpecValidationException;
@@ -256,12 +258,17 @@ public final class EventCycleImpl implements EventCycle, Runnable {
 		// create ECReports
 		ECReports reports = new ECReports();
 
+		// Set schema version
+		reports.setSchemaVersion(new BigDecimal("1.1"));
+
 		// set spec name
 		reports.setSpecName(generator.getName());
 		
 		// set date
 		try {
-			reports.setDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar()));
+			XMLGregorianCalendar calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar());
+			reports.setDate(calendar);
+			reports.setCreationDate(calendar); // ECReports extends Document, which has creationDate attribute
 		} catch (DatatypeConfigurationException e) {
 			LOG.error("Could not create date: " + e.getMessage());
 		}
