@@ -76,7 +76,12 @@ public class CompositeReader extends LogicalReader implements Observer  {
 				
 				// just retrieve the reader from the LogicalReaderManager
 				LogicalReader logicalReader = logicalReaderManager.getLogicalReader(reader);
-				
+
+				// Start the reader
+				if (!logicalReader.isStarted()) {
+					logicalReader.start();
+				}
+
 				// add the reader to the observable
 				logicalReader.addObserver(this);
 				logicalReaders.put(logicalReader.getName(), logicalReader);
@@ -197,6 +202,13 @@ public class CompositeReader extends LogicalReader implements Observer  {
 				// fill in the new readers
 				for (String reader : readers) {
 					LogicalReader logicalReader = logicalReaderManager.getLogicalReader(reader);
+
+					// Start the reader
+					if (!logicalReader.isStarted()) {
+						logicalReader.start();
+					}
+
+					// add the reader to the observable
 					logicalReader.addObserver(this);
 					logicalReaders.put(reader, logicalReader);
 				}

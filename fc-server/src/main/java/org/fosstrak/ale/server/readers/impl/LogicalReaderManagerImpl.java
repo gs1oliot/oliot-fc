@@ -396,16 +396,7 @@ public class LogicalReaderManagerImpl implements LogicalReaderManager {
 
 	@Override
 	public LogicalReader getLogicalReader(String readerName) {
-		
-		LogicalReader reader = null;
-		if (logicalReaders.containsKey(readerName)) {
-			reader = logicalReaders.get(readerName);
-			
-			if (!reader.isStarted()) {
-				reader.start();
-			}
-		}
-		return reader;
+		return logicalReaders.getOrDefault(readerName, null);
 	}
 
 	@Override

@@ -227,10 +227,14 @@ public final class EventCycleImpl implements EventCycle, Runnable {
 		}
 		
 		for (LogicalReader logicalReader : logicalReaders) {
-			
+
+			// Start the reader
+			if (!logicalReader.isStarted()) {
+				logicalReader.start();
+			}
+
 			// subscribe this event cycle to the logical readers
 			LOG.debug("registering EventCycle " + name + " on reader " + logicalReader.getName());
-			
 			logicalReader.addObserver(this);
 		}
 		

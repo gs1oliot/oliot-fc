@@ -91,6 +91,9 @@ public class EventCycleTest {
 		final String logicalReaderName1 = "LogicalReader1";
 		LogicalReader lr1 = EasyMock.createMock(LogicalReader.class);
 		EasyMock.expect(lr1.getName()).andReturn(logicalReaderName1).anyTimes();
+		EasyMock.expect(lr1.isStarted()).andReturn(false).once();
+		lr1.start();
+		EasyMock.expectLastCall().once();
 		lr1.addObserver(EasyMock.isA(EventCycle.class));
 		EasyMock.expectLastCall().anyTimes();
 		EasyMock.replay(lr1);
